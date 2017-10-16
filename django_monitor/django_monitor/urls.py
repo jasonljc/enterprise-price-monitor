@@ -18,6 +18,6 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^price_monitor/', include('price_monitor.urls')),
+    url(r'^', include('price_monitor.urls')),
     url(r'^admin/', admin.site.urls),
 ]

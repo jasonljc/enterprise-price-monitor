@@ -11,6 +11,6 @@ class Price(models.Model):
     car_site = models.ForeignKey('Site', on_delete=models.CASCADE)
     car_tier = models.CharField(max_length=40)
     car_price = models.IntegerField(default=0)
-    sample_date = models.DateTimeField(auto_now_add=True, verbose_name=_(
+    sample_date = models.DateTimeField(auto_now_add=True, verbose_name=(
         'Date of the price invoice.'))
     sample_promotion = models.CharField(max_length=10)
