@@ -2,7 +2,7 @@ import re
 import logging
 import json
 import scrapy
-import time
+from datetime import datetime
 
 # from scrapy.selector import Selector
 # from scrapy.spiders import Spider
@@ -23,6 +23,7 @@ class EnterpriseSpider(scrapy.Spider):
             'endDateTime':'1600',
             'optionalCode':'',
         }
+        self.query_time = self.get_cur_time()
     
     def start_requests(self):
         yield scrapy.Request(self.start_url, callback=self.time_selection)
@@ -41,7 +42,6 @@ class EnterpriseSpider(scrapy.Spider):
         for target in targets:
             logging.info('Finding car info at %s'%response.urljoin(target))
             yield scrapy.Request(response.urljoin(target), callback=self.parse_car_list)
-            # time.sleep(5)
             
     def parse_car_list(self, response):
         # print response.text.encode('utf8')
@@ -53,10 +53,13 @@ class EnterpriseSpider(scrapy.Spider):
             logging.info('Cannot find location')
             print response.text.encode('utf8')
         cur_info['location'] = location
+        cur_info['query_time'] = self.query_time
         for price_info in self.extract_price(response):
             cur_info.update(price_info)
             print cur_info
-        
+    
+    def get_cur_time(self):
+        return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         
     def extract_loc(self, response):
         left_bar = response.css('[id=lss] > table')

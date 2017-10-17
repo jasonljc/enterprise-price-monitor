@@ -10,5 +10,12 @@ import scrapy
 
 class EnterpriseItem(scrapy.Item):
     # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    searchTime = scrapy.Field()
+    searchCriteria = scrapy.Field()
+    startDate = scrapy.Field()
+    startDateTime = scrapy.Field()
+    endDate = scrapy.Field()
+    endDateTime = scrapy.Field()
+    optionalCode = scrapy.Field()
+    location = scrapy.Field()
+    
