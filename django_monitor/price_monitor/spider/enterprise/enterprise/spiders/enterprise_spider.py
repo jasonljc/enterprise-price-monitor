@@ -8,6 +8,10 @@ from datetime import datetime
 # from scrapy.spiders import Spider
 # from scrapy.http.cookies import CookieJar
 
+def convert(name):
+    s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
+    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+
 class EnterpriseSpider(scrapy.Spider):
     name = 'enterprise'
     
@@ -47,16 +51,18 @@ class EnterpriseSpider(scrapy.Spider):
         # print response.text.encode('utf8')
         # I don't know why tbody has to be left out
         # Get location
-        cur_info = self.query_info
+        cur_info = {}
+        for k in self.query_info:
+            cur_info[convert(k)] = self.query_info[k]
         location = self.extract_loc(response)
         if not location:
             logging.info('Cannot find location')
-            print response.text.encode('utf8')
+            # response.text.encode('utf8')
         cur_info['location'] = location
-        cur_info['query_time'] = self.query_time
+        cur_info['search_time'] = self.query_time
         for price_info in self.extract_price(response):
             cur_info.update(price_info)
-            print cur_info
+            yield cur_info
     
     def get_cur_time(self):
         return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
